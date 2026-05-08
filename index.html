@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hệ Thống Lấy Key</title>
+    <script src="https://cloudflare.com"></script>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 100px; background: #f4f4f4; }
+        .key-container { background: white; padding: 30px; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        #key { font-size: 30px; color: #e74c3c; font-weight: bold; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <div class="key-container">
+        <h2>Key Của Bạn Hôm Nay</h2>
+        <div id="key">Đang tạo...</div>
+        <p>Copy mã này dán vào Bot Telegram để chạy Tool</p>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+            const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+            const hash = CryptoJS.MD5(id + today).toString().toUpperCase();
+            document.getElementById('key').innerText = hash.slice(-8); // Lấy 8 ký tự cuối
+        } else {
+            document.getElementById('key').innerText = "THIẾU ID!";
+        }
+    </script>
+</body>
+</html>
