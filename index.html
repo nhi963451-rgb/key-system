@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG CẤP KEY RIÊNG BIỆT</title>
+    <!-- Nhúng thư viện CryptoJS để băm chuỗi MD5 trực tiếp trên trình duyệt -->
+    <script src="cloudflare.com"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f6f9; padding-top: 100px; }
+        .box { background: white; max-width: 400px; margin: 0 auto; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .key { font-size: 24px; font-weight: bold; color: #e74c3c; background: #fce4d6; padding: 10px; border: 2px dashed #e74c3c; margin: 20px 0; border-radius: 5px; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🔑 MÃ KEY CÁ NHÂN CỦA BẠN 🔑</h2>
+    <p>Mã khóa này chỉ có tác dụng với duy nhất ID Telegram của bạn.</p>
+    <div class="key" id="key_box">ĐANG KHỞI TẠO...</div>
+    <button onclick="copyKey()">Sao Chép Mã Key</button>
+</div>
+
+<script>
+    // 1. Tự động đọc ID người dùng truyền từ URL (?uid=12345678)
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('uid') || "0";
+    
+    // 2. Mật khẩu bí mật bảo mật (BẮT BUỘC phải viết giống hệt trong file bot_key.py)
+    const SECRET_PASSWORD = "Minheerr123kkk";
+    
+    // 3. Lấy ngày hôm nay theo định dạng YYYY-MM-DD để đồng bộ thời gian nát key với bot
+    const ngayHomNay = new Date().toISOString().slice(0, 10);
+    
+    // 4. Thực hiện trộn chuỗi dữ liệu và băm MD5 giống hệt cấu trúc của Bot Python
+    const chuoiGoc = SECRET_PASSWORD + "_" + userId + "_" + ngayHomNay;
+    const hash = CryptoJS.MD5(chuoiGoc).toString().substring(0, 10).toUpperCase();
+    
+    // 5. Hiển thị Key cá nhân cuối cùng ra màn hình
+    const finalKey = "M4KEY_" + hash;
+    document.getElementById("key_box").innerText = finalKey;
+
+    function copyKey() {
+        navigator.clipboard.writeText(finalKey);
+        alert("🎯 Đã sao chép mã Key cá nhân!");
+    }
+</script>
+
+</body>
+</html>
